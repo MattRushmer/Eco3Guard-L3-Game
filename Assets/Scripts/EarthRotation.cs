@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Purchasing;
 public class EarthRotation : MonoBehaviour
 {
     public float rotationSpeed = 100f;
@@ -8,11 +6,6 @@ public class EarthRotation : MonoBehaviour
     public Camera mainCamera;
     private bool isRotating = false;
     private Vector3 currentAngularVelocity = Vector3.zero;
-
-    public float scrollRotationSpeed;
-    private RaycastHit raycastHit;
-    Vector3 mPrevPos = Vector3.zero;
-    Vector3 mPosDelta = Vector3.zero;
 
     // On update
     void Update()
@@ -68,30 +61,5 @@ public class EarthRotation : MonoBehaviour
             Quaternion deltaRotation = Quaternion.Euler(currentAngularVelocity * Time.deltaTime);
             transform.rotation = deltaRotation * transform.rotation;
         }
-
-
-        //Rotates the Earth When you drag
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
-        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out raycastHit))
-        {
-            mPosDelta = Input.mousePosition - mPrevPos;
-            if(Vector3.Dot(transform.forward, Vector3.up) >= 0)
-            {
-                transform.Rotate(transform.forward, -Vector3.Dot(mPosDelta, Camera.main.transform.right * Time.deltaTime * scrollRotationSpeed), Space.World);
-            }
-            else
-            {
-                transform.Rotate(transform.forward, Vector3.Dot(mPosDelta, Camera.main.transform.right * Time.deltaTime * scrollRotationSpeed), Space.World);
-            }
-
-            
-            transform.Rotate(Camera.main.transform.right, Vector3.Dot(mPosDelta, Camera.main.transform.up * Time.deltaTime * scrollRotationSpeed), Space.World);
-        }
-
-        mPrevPos = Input.mousePosition;
-
-
     }
-
 }
